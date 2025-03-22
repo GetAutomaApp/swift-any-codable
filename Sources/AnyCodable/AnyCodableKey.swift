@@ -8,7 +8,7 @@ import Foundation
 /// A flexible coding key type that supports both string and integer keys.
 ///
 /// `AnyCodableKey` is designed to handle dynamic and unknown keys in `Codable` containers, providing support for a wide range of use cases.
-public enum AnyCodableKey: CodingKey, Codable, Hashable, Equatable, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral, LosslessStringConvertible, CustomDebugStringConvertible {
+public enum AnyCodableKey: CodingKey, Codable, Hashable, Equatable, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral, LosslessStringConvertible, CustomDebugStringConvertible, Sendable {
 
 	/// Represents a string-based coding key.
 	case string(String)

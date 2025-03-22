@@ -6,7 +6,7 @@
 import Foundation
 
 /// A type that encapsulates a value of any codable type.
-public enum AnyCodableValue: Codable, Hashable, Equatable, CustomDebugStringConvertible {
+public enum AnyCodableValue: Codable, Hashable, Equatable, CustomDebugStringConvertible, Sendable {
 
 	/// Represents a `Date` value.
 	case date(Date)
