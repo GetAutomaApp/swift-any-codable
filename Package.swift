@@ -9,10 +9,7 @@ let package = Package(
 		.tvOS(.v13),
 	],
     products: [
-        .library(
-            name: "AnyCodable",
-			targets: ["AnyCodable"]
-		),
+        .library(name: "AnyCodable",targets: ["AnyCodable"]),
     ],
     targets: [
         .target(
