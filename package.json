@@ -1,0 +1,25 @@
+{
+  "name": "swift-any-codable",
+  "version": "1.0.0",
+  "description": "`AnyCodable` is a Swift package that provides tools to work with heterogeneous or loosely-structured data while maintaining strong type safety and leveraging Swift's powerful `Codable` protocol. It includes support for dynamic coding keys, decoding nested data, and handling any codable value seamlessly.",
+  "main": "index.js",
+  "scripts": {
+    "config": "./.dotfiles/config.sh",
+    "install:swiftlint": "brew install swiftlint",
+    "install:swiftformat": "brew install swiftformat",
+    "install:all": "npx npm-run-all --sequential install:swiftlint install:swiftformat config",
+    "format": "swiftformat .",
+    "lint": "swiftlint --config=.swiftlint.yml ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GetAutomaApp/swift-any-codable.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GetAutomaApp/swift-any-codable/issues"
+  },
+  "homepage": "https://github.com/GetAutomaApp/swift-any-codable#readme"
+}
