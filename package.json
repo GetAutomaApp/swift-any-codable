@@ -9,7 +9,8 @@
     "install:swiftformat": "brew install swiftformat",
     "install:all": "npx npm-run-all --sequential install:swiftlint install:swiftformat config",
     "format": "swiftformat .",
-    "lint": "swiftlint --config=.swiftlint.yml ."
+    "lint": "swiftlint --config=.swiftlint.yml .",
+    "update:submmdules": "git submodule foreach --recursive 'branch=$(git remote show origin | awk \"/HEAD branch/ {print \\$NF}\"); git checkout $branch && git pull origin $branch' && CHANGED=$(git status --porcelain | grep '^ M \\.dotfiles' || true) && if [ -n \"$CHANGED\" ]; then npm run config; fi && git add -A && git commit -m \"chore: update submodules\" || echo 'No changes to commit'",
   },
   "repository": {
     "type": "git",
