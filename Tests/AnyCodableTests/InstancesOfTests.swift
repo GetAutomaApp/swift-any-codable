@@ -3,9 +3,9 @@
 //
 // See the LICENSE file for license information
 
+@testable import AnyCodable
 import Foundation
 import Testing
-@testable import AnyCodable
 
 @Suite struct InstancesOfTests {
 

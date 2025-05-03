@@ -22,8 +22,7 @@ public enum AnyCodableKey: CodingKey, Codable, Hashable, Equatable, ExpressibleB
 	public init(_ codingKey: CodingKey) {
 		if let intValue = codingKey.intValue {
 			self = .integer(intValue)
-		}
-		else {
+		} else {
 			self = .string(codingKey.stringValue)
 		}
 	}
@@ -81,12 +80,10 @@ public enum AnyCodableKey: CodingKey, Codable, Hashable, Equatable, ExpressibleB
 
 		do {
 			self = .integer(try container.decode(Int.self))
-		}
-		catch {
+		} catch {
 			do {
 				self = .string(try container.decode(String.self))
-			}
-			catch {
+			} catch {
 				throw error
 			}
 		}

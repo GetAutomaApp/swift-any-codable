@@ -2,7 +2,6 @@
 // Licensed under BSD 2-Clause "Simplified" License
 //
 // See the LICENSE file for license information
-
 import Foundation
 
 /// A type that encapsulates a value of any codable type.
@@ -57,10 +56,10 @@ public enum AnyCodableValue: Codable, Hashable, Equatable, CustomDebugStringConv
 	case data(Data)
 
 	/// Represents a dictionary of `AnyCodableKey` to `AnyCodableValue` pairs.
-	case dictionary([AnyCodableKey: AnyCodableValue])
+	case dictionary([AnyCodableKey: Self])
 
 	/// Represents an array of `AnyCodableValue` elements.
-	case array([AnyCodableValue])
+	case array([Self])
 
 	/// Initializes a new `AnyCodableValue` instance from a given value.
 	///
@@ -100,9 +99,9 @@ public enum AnyCodableValue: Codable, Hashable, Equatable, CustomDebugStringConv
 			self = .unsignedInteger64(value)
 		case let value as Data:
 			self = .data(value)
-		case let value as [AnyCodableKey: AnyCodableValue]:
+		case let value as [AnyCodableKey: Self]:
 			self = .dictionary(value)
-		case let value as [AnyCodableValue]:
+		case let value as [Self]:
 			self = .array(value)
 		default:
 			return nil
@@ -432,7 +431,7 @@ public enum AnyCodableValue: Codable, Hashable, Equatable, CustomDebugStringConv
 	/// Attempts to retrieve the value as a dictionary.
 	///
 	/// - Returns: A dictionary of type `[AnyCodableKey: AnyCodableValue]` if the underlying type is `.dictionary`, otherwise `nil`.
-	public var dictionaryValue: [AnyCodableKey: AnyCodableValue]? {
+	public var dictionaryValue: [AnyCodableKey: Self]? {
 		switch self {
 		case .dictionary(let value): return value
 		default: return nil
@@ -442,7 +441,7 @@ public enum AnyCodableValue: Codable, Hashable, Equatable, CustomDebugStringConv
 	/// Attempts to retrieve the value as an array.
 	///
 	/// - Returns: An array of `AnyCodableValue` if the underlying type is `.array`, otherwise `nil`.
-	public var arrayValue: [AnyCodableValue]? {
+	public var arrayValue: [Self]? {
 		switch self {
 		case .array(let value): return value
 		default: return nil
@@ -458,80 +457,65 @@ public enum AnyCodableValue: Codable, Hashable, Equatable, CustomDebugStringConv
 	public init(from decoder: Decoder) throws {
 		do {
 			var container = try decoder.unkeyedContainer()
-			var array: [AnyCodableValue] = []
+			var array: [Self] = []
 
 			while !container.isAtEnd {
-				array.append(try container.decode(AnyCodableValue.self))
+				array.append(try container.decode(Self.self))
 			}
 
 			self = .array(array)
-		}
-		catch {
+		} catch {
 			do {
 				let container = try decoder.container(keyedBy: AnyCodableKey.self)
-				var dictionary: [AnyCodableKey: AnyCodableValue] = [:]
+				var dictionary: [AnyCodableKey: Self] = [:]
 
 				for key in container.allKeys {
-					dictionary[key] = try container.decode(AnyCodableValue.self, forKey: key)
+					dictionary[key] = try container.decode(Self.self, forKey: key)
 				}
 
 				self = .dictionary(dictionary)
-			}
-			catch {
+			} catch {
 				let container = try decoder.singleValueContainer()
 
 				do {
 					self = .bool(try container.decode(Bool.self))
-				}
-				catch {
+				} catch {
 					do {
 						self = .string(try container.decode(String.self))
-					}
-					catch {
+					} catch {
 						do {
 							self = .unsignedInteger8(try container.decode(UInt8.self))
-						}
-						catch {
+						} catch {
 							do {
 								self = .unsignedInteger16(try container.decode(UInt16.self))
-							}
-							catch {
+							} catch {
 								do {
 									self = .unsignedInteger32(try container.decode(UInt32.self))
-								}
-								catch {
+								} catch {
 									do {
 										self = .unsignedInteger64(try container.decode(UInt64.self))
-									}
-									catch {
+									} catch {
 										do {
 											self = .integer8(try container.decode(Int8.self))
-										}
-										catch {
+										} catch {
 											do {
 												self = .integer16(try container.decode(Int16.self))
-											}
-											catch {
+											} catch {
 												do {
 													self = .integer32(try container.decode(Int32.self))
-												}
-												catch {
+												} catch {
 													do {
 														self = .integer64(try container.decode(Int64.self))
-													}
-													catch {
+													} catch {
 														do {
 															self = .float(try container.decode(Float.self))
-														}
-														catch {
+														} catch {
 															do {
 																self = .double(try container.decode(Double.self))
-															}
-															catch {
+															} catch {
 																do {
 																	self = .date(try container.decode(Date.self))
-																}
-																catch {
+																} catch {
 																	self = .data(try container.decode(Data.self))
 																}
 															}
@@ -661,4 +645,3 @@ public enum AnyCodableValue: Codable, Hashable, Equatable, CustomDebugStringConv
 	}
 
 }
-

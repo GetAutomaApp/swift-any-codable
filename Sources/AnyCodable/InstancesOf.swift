@@ -27,11 +27,9 @@ public struct InstancesOf<Element: Decodable>: Decodable {
 	public init(from decoder: Decoder) {
 		if let container = try? decoder.container(keyedBy: AnyCodableKey.self) {
 			self.init(container.decode(instancesOf: Element.self))
-		}
-		else if var container = try? decoder.unkeyedContainer() {
+		} else if var container = try? decoder.unkeyedContainer() {
 			self.init(container.decode(instancesOf: Element.self))
-		}
-		else {
+		} else {
 			self.init([])
 		}
 	}

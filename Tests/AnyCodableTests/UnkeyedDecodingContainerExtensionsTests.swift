@@ -3,9 +3,9 @@
 //
 // See https://swift.org/LICENSE.txt for license information
 
+@testable import AnyCodable
 import Foundation
 import Testing
-@testable import AnyCodable
 
 @Suite struct UnkeyedDecodingContainerExtensionsTests {
 

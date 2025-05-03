@@ -3,9 +3,9 @@
 //
 // See the LICENSE file for license information
 
+import AnyCodable
 import Foundation
 import Testing
-import AnyCodable
 
 @Suite struct ExampleTests {
 

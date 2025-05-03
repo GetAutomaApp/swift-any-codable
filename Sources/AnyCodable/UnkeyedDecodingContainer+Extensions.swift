@@ -20,14 +20,11 @@ public extension UnkeyedDecodingContainer {
 		while !isAtEnd {
 			if let item = try? decode(T.self) {
 				elements.append(item)
-			}
-			else if let container = try? nestedContainer(keyedBy: AnyCodableKey.self) {
+			} else if let container = try? nestedContainer(keyedBy: AnyCodableKey.self) {
 				elements.append(contentsOf: container.decode(instancesOf: type))
-			}
-			else if var container = try? nestedUnkeyedContainer() {
+			} else if var container = try? nestedUnkeyedContainer() {
 				elements.append(contentsOf: container.decode(instancesOf: type))
-			}
-			else {
+			} else {
 				_ = try? decode(AnyCodableValue.self)
 			}
 		}

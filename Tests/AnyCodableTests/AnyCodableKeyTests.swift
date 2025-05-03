@@ -3,9 +3,9 @@
 //
 // See the LICENSE file for license information
 
+@testable import AnyCodable
 import Foundation
 import Testing
-@testable import AnyCodable
 
 @Suite struct AnyCodableKeyTests {
 
@@ -14,7 +14,7 @@ import Testing
 	}
 
 	private enum IntegerCodingKey: Int, CodingKey {
-		case example = 12345
+		case example = 12_345
 	}
 
 	@Test func initWithStringCodingKey() {
@@ -39,7 +39,7 @@ import Testing
 	}
 
 	@Test func initWithIntegerValue() {
-		let intValue = 12345
+		let intValue = 12_345
 		let expectation = AnyCodableKey.integer(intValue)
 
 		#expect(AnyCodableKey(intValue: intValue) == expectation)
@@ -53,7 +53,7 @@ import Testing
 			AnyCodableKey.string("12345").stringValue == "12345"
 		)
 		#expect(
-			AnyCodableKey.integer(12345).stringValue == "12345"
+			AnyCodableKey.integer(12_345).stringValue == "12345"
 		)
 	}
 
@@ -62,10 +62,10 @@ import Testing
 			AnyCodableKey.string("example").intValue == nil
 		)
 		#expect(
-			AnyCodableKey.string("12345").intValue == 12345
+			AnyCodableKey.string("12345").intValue == 12_345
 		)
 		#expect(
-			AnyCodableKey.integer(12345).intValue == 12345
+			AnyCodableKey.integer(12_345).intValue == 12_345
 		)
 	}
 
@@ -87,7 +87,7 @@ import Testing
 		let data = Data(#"12345"#.utf8)
 		let anyCodableKey = try JSONDecoder().decode(AnyCodableKey.self, from: data)
 
-		#expect(anyCodableKey == .integer(12345))
+		#expect(anyCodableKey == .integer(12_345))
 	}
 
 	@Test func decodeNullValue() throws {
@@ -107,7 +107,7 @@ import Testing
 
 	@Test func encodeIntegerValue() throws {
 		let expectation = Data(#"12345"#.utf8)
-		let anyCodableKey = AnyCodableKey.integer(12345)
+		let anyCodableKey = AnyCodableKey.integer(12_345)
 		let encoded = try JSONEncoder().encode(anyCodableKey)
 
 		#expect(encoded == expectation)

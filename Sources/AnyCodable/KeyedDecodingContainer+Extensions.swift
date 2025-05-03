@@ -16,7 +16,7 @@ public extension KeyedDecodingContainer {
 	/// - Returns: An array of decoded values of the requested type.
 	/// - Throws: `DecodingError.keyNotFound` if `self` does not have an entry for the given key.
 	/// - Throws: `DecodingError.valueNotFound` if `self` has a null entry for the given key.
-	func decode<T: Decodable>(instancesOf type: T.Type, forKey key: Key) throws -> [T] {
+	func decode<T: Decodable>(instancesOf _: T.Type, forKey key: Key) throws -> [T] {
 		Array(try decode(InstancesOf<T>.self, forKey: key))
 	}
 
@@ -29,7 +29,7 @@ public extension KeyedDecodingContainer {
 	///   - type: The type of value to decode.
 	///   - key: The key that the structure containing the decoded values is associated with.
 	/// - Returns: An array of decoded values of the requested type.
-	func decodeIfPresent<T: Decodable>(instancesOf type: T.Type, forKey key: Key) throws -> [T]? {
+	func decodeIfPresent<T: Decodable>(instancesOf _: T.Type, forKey key: Key) throws -> [T]? {
 		try decodeIfPresent(InstancesOf<T>.self, forKey: key).map { Array($0) }
 	}
 
@@ -46,11 +46,9 @@ public extension KeyedDecodingContainer {
 		for key in allKeys {
 			if let item = try? decode(T.self, forKey: key) {
 				elements.append(item)
-			}
-			else if let container = try? nestedContainer(keyedBy: AnyCodableKey.self, forKey: key) {
+			} else if let container = try? nestedContainer(keyedBy: AnyCodableKey.self, forKey: key) {
 				elements.append(contentsOf: container.decode(instancesOf: type))
-			}
-			else if var container = try? nestedUnkeyedContainer(forKey: key) {
+			} else if var container = try? nestedUnkeyedContainer(forKey: key) {
 				elements.append(contentsOf: container.decode(instancesOf: type))
 			}
 		}
