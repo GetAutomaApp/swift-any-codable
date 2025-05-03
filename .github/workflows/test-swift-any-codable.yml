@@ -3,7 +3,7 @@ name: Test SwiftAnyCodable
 on:
   pull_request:
     paths:
-      - '**.swift'
+      - "**.swift"
 
 jobs:
   swifttesting:
@@ -13,5 +13,5 @@ jobs:
       - name: Run SwiftTesting
         uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
-          working-directory: '.'
-          compose: 'false'
+          working-directory: "."
+          compose: "false"
