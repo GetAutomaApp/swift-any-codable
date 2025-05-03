@@ -7,14 +7,16 @@ import Foundation
 
 /// A flexible coding key type that supports both string and integer keys.
 ///
-/// `AnyCodableKey` is designed to handle dynamic and unknown keys in `Codable` containers, providing support for a wide range of use cases.
-public enum AnyCodableKey: CodingKey, Codable, Hashable, Equatable, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral, LosslessStringConvertible, CustomDebugStringConvertible, Sendable {
+/// `AnyCodableKey` is designed to handle dynamic and unknown keys in `Codable`
+/// containers, providing support for a wide range of use cases.
+public enum AnyCodableKey:
+CodingKey, Codable, Hashable, Equatable, ExpressibleByStringLiteral,
+ExpressibleByIntegerLiteral, LosslessStringConvertible, CustomDebugStringConvertible, Sendable {
+	/// Represents an integer-based coding key.
+	case integer(Int)
 
 	/// Represents a string-based coding key.
 	case string(String)
-
-	/// Represents an integer-based coding key.
-	case integer(Int)
 
 	/// Initializes a new `AnyCodableKey` from an existing `CodingKey`.
 	///
@@ -44,7 +46,8 @@ public enum AnyCodableKey: CodingKey, Codable, Hashable, Equatable, ExpressibleB
 
 	/// An integer representation of the coding key.
 	///
-	/// - Returns: The integer value if the key is `.integer`,  or if the string value can be converted to an `Int`, otherwise `nil`.
+	/// - Returns: The integer value if the key is `.integer`.
+	//    Or if the string value can be converted to an `Int`, otherwise `nil`.
 	public var intValue: Int? {
 		switch self {
 		case .integer(let intValue):
