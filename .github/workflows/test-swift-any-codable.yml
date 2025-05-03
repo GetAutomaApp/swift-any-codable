@@ -1,0 +1,17 @@
+name: Test SwiftAnyCodable
+
+on:
+  pull_request:
+    paths:
+      - '**.swift'
+
+jobs:
+  swifttesting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run SwiftTesting
+        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        with:
+          working-directory: '.'
+          compose: 'false'
