@@ -3,7 +3,7 @@ name: Lint Codebase
 on:
   pull_request:
     paths:
-      - '**.swift'
+      - "**.swift"
 
 jobs:
   swiftlint:
@@ -11,4 +11,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run SwiftLint
-        uses: GetAutomaApp/opensource-actions/swiftlint@main
+        uses: GetAutomaApp/opensource-actions/swiftlint@simon/experiment-swiftlint-config-args'
