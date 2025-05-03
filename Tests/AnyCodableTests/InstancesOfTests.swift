@@ -7,54 +7,60 @@
 import Foundation
 import Testing
 
-@Suite struct InstancesOfTests {
-
-	struct TestItem: Codable, Equatable {
-		let id: Int
-		let name: String
+@Suite
+internal struct InstancesOfTests {
+	public struct TestItem: Codable, Equatable {
+		public let id: Int
+		public let name: String
 	}
 
-	@Test func decodeInvalidData() throws {
+	@Test
+	private func decodeInvalidData() throws {
 		let jsonData = Data(#""INVALID""#.utf8)
 		let result = try JSONDecoder().decode(InstancesOf<Int>.self, from: jsonData)
 
 		#expect(Array(result) == [])
 	}
 
-	@Test func decodeSimpleArray() throws {
+	@Test
+	private func decodeSimpleArray() throws {
 		let jsonData = Data(#"[1, 2, 3, 4]"#.utf8)
 		let result = try JSONDecoder().decode(InstancesOf<Int>.self, from: jsonData)
 
 		#expect(Array(result) == [1, 2, 3, 4])
 	}
 
-	@Test func decodeDictionary() throws {
+	@Test
+	private func decodeDictionary() throws {
 		let jsonData = Data(#"{"item": {"id": 1, "name": "Item 1"}}"#.utf8)
 		let result = try JSONDecoder().decode(InstancesOf<TestItem>.self, from: jsonData)
 
 		#expect(Array(result) == [
-			TestItem(id: 1, name: "Item 1")
+			TestItem(id: 1, name: "Item 1"),
 		])
 	}
 
-	@Test func decodeNestedObjects() throws {
+	@Test
+	private func decodeNestedObjects() throws {
 		let jsonData = Data(#"[{"id": 1, "name": "Item 1"}, {"id": 2, "name": "Item 2"}]"#.utf8)
 		let result = try JSONDecoder().decode(InstancesOf<TestItem>.self, from: jsonData)
 
 		#expect(Array(result) == [
 			TestItem(id: 1, name: "Item 1"),
-			TestItem(id: 2, name: "Item 2")
+			TestItem(id: 2, name: "Item 2"),
 		])
 	}
 
-	@Test func decodeEmptyArray() throws {
+	@Test
+	private func decodeEmptyArray() throws {
 		let jsonData = Data(#"[]"#.utf8)
 		let result = try JSONDecoder().decode(InstancesOf<Int>.self, from: jsonData)
 
 		#expect(result.isEmpty)
 	}
 
-	@Test func decodeComplexStructure() throws {
+	@Test
+	private func decodeComplexStructure() throws {
 		let jsonData = Data(#"[{"id": 1, "name": "Nested", "nested": [1, 2]}, {"id": 2, "name": "Simple"}]"#.utf8)
 
 		struct ComplexItem: Codable, Equatable {
@@ -67,11 +73,12 @@ import Testing
 
 		#expect(Array(result) == [
 			ComplexItem(id: 1, name: "Nested", nested: [1, 2]),
-			ComplexItem(id: 2, name: "Simple", nested: nil)
+			ComplexItem(id: 2, name: "Simple", nested: nil),
 		])
 	}
 
-	@Test func randomAccessCollectionCompliance() throws {
+	@Test
+	private func randomAccessCollectionCompliance() throws {
 		let jsonData = Data(#"["a", "b", "c"]"#.utf8)
 		let result = try JSONDecoder().decode(InstancesOf<String>.self, from: jsonData)
 
@@ -80,10 +87,11 @@ import Testing
 		#expect(result[0] == "a")
 		#expect(result[1] == "b")
 		#expect(result[2] == "c")
-		#expect(result.indices == 0..<3)
+		#expect(result.indices == 0 ..< 3)
 	}
 
-	@Test func encodeSimpleArray() throws {
+	@Test
+	private func encodeSimpleArray() throws {
 		let instances = InstancesOf([1, 2, 3, 4])
 		let encoder = JSONEncoder()
 		encoder.outputFormatting = [.sortedKeys]
@@ -93,10 +101,11 @@ import Testing
 		#expect(jsonString == #"[1,2,3,4]"#)
 	}
 
-	@Test func encodeNestedObjects() throws {
+	@Test
+	private func encodeNestedObjects() throws {
 		let instances = InstancesOf([
 			TestItem(id: 1, name: "Item 1"),
-			TestItem(id: 2, name: "Item 2")
+			TestItem(id: 2, name: "Item 2"),
 		])
 		let encoder = JSONEncoder()
 		encoder.outputFormatting = [.sortedKeys]
@@ -106,7 +115,8 @@ import Testing
 		#expect(jsonString == #"[{"id":1,"name":"Item 1"},{"id":2,"name":"Item 2"}]"#)
 	}
 
-	@Test func encodeEmptyArray() throws {
+	@Test
+	private func encodeEmptyArray() throws {
 		let instances = InstancesOf<Int>([])
 		let encoder = JSONEncoder()
 		encoder.outputFormatting = [.sortedKeys]
@@ -115,5 +125,4 @@ import Testing
 
 		#expect(jsonString == "[]")
 	}
-
 }

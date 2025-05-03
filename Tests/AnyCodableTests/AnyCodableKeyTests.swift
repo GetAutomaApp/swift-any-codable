@@ -7,45 +7,50 @@
 import Foundation
 import Testing
 
-@Suite struct AnyCodableKeyTests {
-
+@Suite
+internal struct AnyCodableKeyTests {
 	private enum StringCodingKey: String, CodingKey {
-		case example = "example"
+		case example
 	}
 
 	private enum IntegerCodingKey: Int, CodingKey {
 		case example = 12_345
 	}
 
-	@Test func initWithStringCodingKey() {
+	@Test
+	private func initWithStringCodingKey() {
 		let codingKey = StringCodingKey.example
 		let anyCodableKey = AnyCodableKey(codingKey)
 
 		#expect(anyCodableKey == .string(codingKey.rawValue))
 	}
 
-	@Test func initWithIntegerCodingKey() {
+	@Test
+	private func initWithIntegerCodingKey() {
 		let codingKey = IntegerCodingKey.example
 		let anyCodableKey = AnyCodableKey(codingKey)
 
 		#expect(anyCodableKey == .integer(codingKey.rawValue))
 	}
 
-	@Test func initWithStringValue() {
+	@Test
+	private func initWithStringValue() {
 		let stringValue = "example"
 		let expectation = AnyCodableKey.string(stringValue)
 
 		#expect(AnyCodableKey(stringValue: stringValue) == expectation)
 	}
 
-	@Test func initWithIntegerValue() {
+	@Test
+	private func initWithIntegerValue() {
 		let intValue = 12_345
 		let expectation = AnyCodableKey.integer(intValue)
 
 		#expect(AnyCodableKey(intValue: intValue) == expectation)
 	}
 
-	@Test func stringValue() {
+	@Test
+	private func stringValue() {
 		#expect(
 			AnyCodableKey.string("example").stringValue == "example"
 		)
@@ -57,7 +62,8 @@ import Testing
 		)
 	}
 
-	@Test func integerValue() {
+	@Test
+	private func integerValue() {
 		#expect(
 			AnyCodableKey.string("example").intValue == nil
 		)
@@ -69,35 +75,40 @@ import Testing
 		)
 	}
 
-	@Test func losslessStringConvertible() {
+	@Test
+	private func losslessStringConvertible() {
 		let string = "example"
 		let example = AnyCodableKey(string)
 		#expect(example == AnyCodableKey(stringValue: string))
 		#expect(example.description == string)
 	}
 
-	@Test func decodeStringValue() throws {
+	@Test
+	private func decodeStringValue() throws {
 		let data = Data(#""example""#.utf8)
 		let anyCodableKey = try JSONDecoder().decode(AnyCodableKey.self, from: data)
 
 		#expect(anyCodableKey == .string("example"))
 	}
 
-	@Test func decodeIntegerValue() throws {
+	@Test
+	private func decodeIntegerValue() throws {
 		let data = Data(#"12345"#.utf8)
 		let anyCodableKey = try JSONDecoder().decode(AnyCodableKey.self, from: data)
 
 		#expect(anyCodableKey == .integer(12_345))
 	}
 
-	@Test func decodeNullValue() throws {
+	@Test
+	private func decodeNullValue() throws {
 		let data = Data(#"null"#.utf8)
 		#expect(throws: Error.self) {
 			try JSONDecoder().decode(AnyCodableKey.self, from: data)
 		}
 	}
 
-	@Test func encodeStringValue() throws {
+	@Test
+	private func encodeStringValue() throws {
 		let expectation = Data(#""example""#.utf8)
 		let anyCodableKey = AnyCodableKey.string("example")
 		let encoded = try JSONEncoder().encode(anyCodableKey)
@@ -105,12 +116,12 @@ import Testing
 		#expect(encoded == expectation)
 	}
 
-	@Test func encodeIntegerValue() throws {
+	@Test
+	private func encodeIntegerValue() throws {
 		let expectation = Data(#"12345"#.utf8)
 		let anyCodableKey = AnyCodableKey.integer(12_345)
 		let encoded = try JSONEncoder().encode(anyCodableKey)
 
 		#expect(encoded == expectation)
 	}
-
 }

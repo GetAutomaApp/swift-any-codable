@@ -9,7 +9,6 @@ import Testing
 
 @Suite
 internal struct AnyCodableValueTests {
-
 	public struct CodableStructure: Codable {
 		public let date: Date
 		public let bool: Bool
