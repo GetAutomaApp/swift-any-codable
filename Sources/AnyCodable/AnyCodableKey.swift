@@ -170,5 +170,4 @@ public enum AnyCodableKey: CodingKey, Codable, Hashable, Equatable, ExpressibleB
 		case .integer(let value): return "\(value)"
 		}
 	}
-
 }
