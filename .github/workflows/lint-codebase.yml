@@ -11,4 +11,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run SwiftLint
-        uses: GetAutomaApp/opensource-actions/swiftlint@simon/experiment-swiftlint-config-args
+        uses: GetAutomaApp/opensource-actions/swiftlint@main
