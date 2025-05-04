@@ -3,14 +3,14 @@
 //
 // See the LICENSE file for license information
 
+import AnyCodable
 import Foundation
 import Testing
-import AnyCodable
 
-@Suite struct ExampleTests {
-
+@Suite
+internal struct ExampleTests {
 	@Test("Working with AnyCodableValue")
-	func exampleWorkingWithAnyCodableValue() throws {
+	private func exampleWorkingWithAnyCodableValue() throws {
 		let jsonData = Data(#"{ "key": 123, "nested": [1, "two", 0.3] }"#.utf8)
 		let decoded = try JSONDecoder().decode([String: AnyCodableValue].self, from: jsonData)
 
@@ -27,7 +27,7 @@ import AnyCodable
 	}
 
 	@Test("Flexible Coding Keys with AnyCodableKey")
-	func exampleFlexibleCodingKeysWithAnyCodableKey() throws {
+	private func exampleFlexibleCodingKeysWithAnyCodableKey() throws {
 		struct Post: Codable {
 			var title: String
 			var author: String
@@ -40,8 +40,8 @@ import AnyCodable
 
 			init(from decoder: any Decoder) throws {
 				let container = try decoder.container(keyedBy: CodingKeys.self)
-				self.title = try container.decode(String.self, forKey: .title)
-				self.author = try container.decode(String.self, forKey: .author)
+				title = try container.decode(String.self, forKey: .title)
+				author = try container.decode(String.self, forKey: .author)
 
 				let unsupportedContainer = try decoder.container(keyedBy: AnyCodableKey.self)
 				var unsupportedValues: [String: AnyCodableValue] = [:]
@@ -53,22 +53,28 @@ import AnyCodable
 
 			func encode(to encoder: any Encoder) throws {
 				var container = encoder.container(keyedBy: AnyCodableKey.self)
-				try container.encode(self.title, forKey: AnyCodableKey(CodingKeys.title.rawValue))
-				try container.encode(self.author, forKey: AnyCodableKey(CodingKeys.author.rawValue))
+				try container.encode(title, forKey: AnyCodableKey(CodingKeys.title.rawValue))
+				try container.encode(author, forKey: AnyCodableKey(CodingKeys.author.rawValue))
 
-				for (key, value) in self.unsupportedValues {
+				for (key, value) in unsupportedValues {
 					try container.encode(value, forKey: AnyCodableKey(key))
 				}
 			}
-
 		}
 
 		let jsonData = Data(#"{"title": "Example", "author": "Jelly", "date": "2025-01-01T12:34:56Z", "draft": true}"#.utf8)
 		let post = try JSONDecoder().decode(Post.self, from: jsonData)
-		print(post) // Post(title: "Example", author: "Jelly", unsupportedValues: ["draft": .bool(true), "date": .string("2025-01-01T12:34:56Z")])
+		// Post(
+		// title: "Example",
+		// author: "Jelly",
+		// unsupportedValues: ["draft": .bool(true),
+		// "date": .string("2025-01-01T12:34:56Z")]
+		// )
+		print(post)
 
 		let encoded = try JSONEncoder().encode(post)
-		print(String(data: encoded, encoding: .utf8)!) // {"author":"Jelly","draft":true,"title":"Example","date":"2025-01-01T12:34:56Z"}
+		// {"author":"Jelly","draft":true,"title":"Example","date":"2025-01-01T12:34:56Z"}
+		print(String(data: encoded, encoding: .utf8) ?? "")
 
 		#expect(post.title == "Example")
 		#expect(post.author == "Jelly")
@@ -77,30 +83,30 @@ import AnyCodable
 	}
 
 	@Test("Decoding Collections with InstancesOf")
-	func exampleDecodingCollectionsWithInstancesOf() throws {
+	private func exampleDecodingCollectionsWithInstancesOf() throws {
 		let jsonData = Data("""
-			{
-				"data": {
-					"repository": {
-						"milestone": {
-							"title": "v2025.1",
-							"issues": {
-								"nodes": [
-									 {
-										 "number": 100,
-										 "title": "A very real problem!"
-									 },
-									 {
-										 "number": 101,
-										 "title": "Less of a problem, more of a request."
-									 },
-								]
-							}
+		{
+			"data": {
+				"repository": {
+					"milestone": {
+						"title": "v2025.1",
+						"issues": {
+							"nodes": [
+								 {
+									 "number": 100,
+									 "title": "A very real problem!"
+								 },
+								 {
+									 "number": 101,
+									 "title": "Less of a problem, more of a request."
+								 },
+							]
 						}
 					}
 				}
 			}
-			""".utf8)
+		}
+		""".utf8)
 
 		struct Milestone: Decodable, Equatable {
 			var title: String
@@ -121,7 +127,6 @@ import AnyCodable
 				title = try container.decode(String.self, forKey: .title)
 				issues = try container.decode(instancesOf: Issue.self, forKey: .issues)
 			}
-
 		}
 
 		struct Issue: Decodable, Equatable {
@@ -130,9 +135,33 @@ import AnyCodable
 		}
 
 		let milestones = try JSONDecoder().decode(InstancesOf<Milestone>.self, from: jsonData)
-		print(Array(milestones)) // [Milestone(title: "v2025.1", issues: [Issue(number: 100, title: "A very real problem!"), Issue(number: 101, title: "Less of a problem, more of a request.")])]
+		// [
+		// Milestone(
+		// title: "v2025.1",
+		// issues: [
+		//   Issue(
+		//     number: 100,
+		//     title: "A very real problem!"
+		//   ),
+		//   Issue(
+		//     number: 101,
+		//     title: "Less of a problem, more of a request."
+		//   )
+	    //   ]
+		//  )
+		// ]
+		print(Array(milestones))
 
-		#expect(Array(milestones) == [Milestone(title: "v2025.1", issues: [Issue(number: 100, title: "A very real problem!"), Issue(number: 101, title: "Less of a problem, more of a request.")])])
+		#expect(
+			Array(milestones) == [
+				Milestone(
+					title: "v2025.1",
+					issues: [
+						Issue(number: 100, title: "A very real problem!"),
+						Issue(number: 101, title: "Less of a problem, more of a request.")
+					]
+				)
+			]
+		)
 	}
-
 }

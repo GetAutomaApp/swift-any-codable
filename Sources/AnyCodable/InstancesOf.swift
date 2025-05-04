@@ -7,14 +7,14 @@ import Foundation
 
 /// A structure that can decode collections of specific `Element` values from complex or nested data sources.
 ///
-/// `InstancesOf` is particularly useful for parsing JSON or other formats where the target type is interspersed with other data.
+/// `InstancesOf` is useful for parsing JSON where the target type is interspersed with other data.
 public struct InstancesOf<Element: Decodable>: Decodable {
 
 	/// The decoded collection of elements.
-	let elements: [Element]
+	public let elements: [Element]
 
 	/// Initializes a new `InstancesOf` with the elements of the provided collection.
-	init<T: Collection>(_ elements: T) where T.Element == Element {
+	internal init<T: Collection>(_ elements: T) where T.Element == Element {
 		self.elements = Array(elements)
 	}
 
@@ -27,11 +27,9 @@ public struct InstancesOf<Element: Decodable>: Decodable {
 	public init(from decoder: Decoder) {
 		if let container = try? decoder.container(keyedBy: AnyCodableKey.self) {
 			self.init(container.decode(instancesOf: Element.self))
-		}
-		else if var container = try? decoder.unkeyedContainer() {
+		} else if var container = try? decoder.unkeyedContainer() {
 			self.init(container.decode(instancesOf: Element.self))
-		}
-		else {
+		} else {
 			self.init([])
 		}
 	}
