@@ -77,8 +77,9 @@ internal struct KeyedDecodingContainerExtensionsTests {
 
     @Test
     private func decodeInstancesOfCustomTypeFromNestedArrays() throws {
-        let nestedArraysData = Data(#"{"numbers": [[{"id": 1, "name": "Item 1"}], [{"id": 2, "name": "Item 2"}]]}"#
-            .utf8)
+        let nestedArraysData =
+            Data(#"{"numbers": [[{"id": 1, "name": "Item 1"}], [{"id": 2, "name": "Item 2"}]]}"#
+                .utf8)
         let container1 = try keyedDecodingContainer(from: nestedArraysData, for: CodingKeys.self)
         #expect(
             container1.decode(instancesOf: [TestItem].self) == [

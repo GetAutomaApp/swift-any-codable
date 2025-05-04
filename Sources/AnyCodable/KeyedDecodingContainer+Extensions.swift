@@ -25,7 +25,8 @@ public extension KeyedDecodingContainer {
 
     /// Decodes an array of the given type for the given key from loosely-structured data.
     ///
-    /// This method returns `nil` if the container does not have a value associated with `key`, or if the value is null.
+    /// This method returns `nil` if the container does not have a value associated with `key`, or if the value is
+    /// null.
     /// The difference between these states can be distinguished with a `contains(_:)` call.
     ///
     /// - Note: This method supports heterogenous or loosely-structured data, and will traverse multiple levels of

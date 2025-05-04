@@ -70,8 +70,9 @@ internal struct ExampleTests {
             }
         }
 
-        let jsonData = Data(#"{"title": "Example", "author": "Jelly", "date": "2025-01-01T12:34:56Z", "draft": true}"#
-            .utf8)
+        let jsonData =
+            Data(#"{"title": "Example", "author": "Jelly", "date": "2025-01-01T12:34:56Z", "draft": true}"#
+                .utf8)
         let post = try JSONDecoder().decode(Post.self, from: jsonData)
         // Post(
         // title: "Example",

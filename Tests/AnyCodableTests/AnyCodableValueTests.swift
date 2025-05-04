@@ -432,7 +432,8 @@ internal struct AnyCodableValueTests {
 
         // JSON
 
-        let jsonData = try JSONEncoder().encode(["unsignedInteger": AnyCodableValue.unsignedInteger(unsignedInteger)])
+        let jsonData = try JSONEncoder()
+            .encode(["unsignedInteger": AnyCodableValue.unsignedInteger(unsignedInteger)])
         let jsonDecoded = try JSONDecoder().decode([String: AnyCodableValue].self, from: jsonData)
         // This is normal, as AnyCodableValue prefers decoding specific-size integers
         #expect(jsonDecoded["unsignedInteger"] == .unsignedInteger64(UInt64(unsignedInteger)))
@@ -590,7 +591,14 @@ internal struct AnyCodableValueTests {
         #expect(AnyCodableValue.unsignedInteger16(12_345).value as? UInt16 == 12_345)
         #expect(AnyCodableValue.unsignedInteger32(12_345).value as? UInt32 == 12_345)
         #expect(AnyCodableValue.unsignedInteger64(12_345).value as? UInt64 == 12_345)
-        #expect(AnyCodableValue.data(Data([00, 11, 22, 33, 44, 55])).value as? Data == Data([00, 11, 22, 33, 44, 55]))
+        #expect(AnyCodableValue.data(Data([00, 11, 22, 33, 44, 55])).value as? Data == Data([
+            00,
+            11,
+            22,
+            33,
+            44,
+            55,
+        ]))
         #expect(
             AnyCodableValue.dictionary(
                 [12_345: .string("example")]
@@ -1008,7 +1016,8 @@ internal struct AnyCodableValueTests {
         #expect(AnyCodableValue.integer16(.min).debugDescription == #".integer16(-32768)"#)
         #expect(AnyCodableValue.integer32(.min).debugDescription == #".integer32(-2147483648)"#)
         #expect(AnyCodableValue.integer64(.min).debugDescription == #".integer64(-9223372036854775808)"#)
-        #expect(AnyCodableValue.unsignedInteger(.max).debugDescription == #".unsignedInteger(18446744073709551615)"#)
+        #expect(AnyCodableValue.unsignedInteger(.max)
+            .debugDescription == #".unsignedInteger(18446744073709551615)"#)
         #expect(AnyCodableValue.unsignedInteger8(.max).debugDescription == #".unsignedInteger8(255)"#)
         #expect(AnyCodableValue.unsignedInteger16(.max).debugDescription == #".unsignedInteger16(65535)"#)
         #expect(AnyCodableValue.unsignedInteger32(.max).debugDescription == #".unsignedInteger32(4294967295)"#)
